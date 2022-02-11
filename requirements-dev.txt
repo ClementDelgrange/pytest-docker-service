@@ -1,0 +1,4 @@
+mypy
+psycopg
+pylint
+pytest-cov
