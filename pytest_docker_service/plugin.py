@@ -2,7 +2,7 @@
 pytest_docker_service package contains fixtures factories starting docker containers.
 """
 import time
-from typing import Callable, Dict, Generator, TYPE_CHECKING
+from typing import Callable, Dict, Generator, Optional, TYPE_CHECKING
 
 import docker
 import pytest
@@ -24,18 +24,18 @@ def _docker_client() -> "DockerClient":
 
 def docker_container(
         scope: "_Scope",
-        build_path: str,
         image_name: str,
         container_name: str,
+        build_path: Optional[str] = None,
         environment: Dict[str, str] = None,
 ) -> Callable:
     """
     Fixtures factory that returns a container that is running the specified image.
 
     :param scope: the pytest fixture scope (https://docs.pytest.org/en/latest/how-to/fixtures.html#scope-sharing-fixtures-across-classes-modules-packages-or-session)
-    :param build_path: path to the directory containing the Dockerfile
     :param image_name: name of the docker image to run
     :param container_name: name for the docker container to start
+    :param build_path: path to the directory containing the Dockerfile
     :param environment: environment variables to set inside the container
     :return: a pytest fixture function
     """
@@ -43,7 +43,10 @@ def docker_container(
 
     @pytest.fixture(scope=scope)
     def _docker_container(_docker_client: "DockerClient") -> Generator:
-        image, _ = _docker_client.images.build(path=build_path, tag=image_name)
+        if build_path:
+            image, _ = _docker_client.images.build(path=build_path, tag=image_name)
+        else:
+            image = _docker_client.images.pull(repository=image_name)
 
         container = _docker_client.containers.run(
             image.id,
