@@ -1,8 +1,9 @@
 """
 pytest_docker_service package contains fixtures factories starting docker containers.
 """
+import random
 import time
-from typing import Any, Callable, Dict, Generator, List, Optional, TYPE_CHECKING, Iterable
+from typing import Any, Callable, Dict, Generator, List, Optional, TYPE_CHECKING
 
 import docker
 import pytest
@@ -25,7 +26,7 @@ def _docker_client() -> "DockerClient":
 def docker_container(
         scope: "_Scope",
         image_name: str,
-        container_name: str,
+        container_name: Optional[str] = "",
         build_path: Optional[str] = None,
         ports: Dict[str, Any] = None,
         environment: Dict[str, str] = None,
@@ -42,6 +43,11 @@ def docker_container(
     :return: a pytest fixture function
     """
     _environment: Dict[str, Any] = environment if environment else {}  # https://mypy.readthedocs.io/en/stable/common_issues.html#narrowing-and-inner-functions
+    _container_name: str = (
+        container_name
+        if container_name
+        else f"{image_name.split('/')[-1]}-{random.randint(0, 999999):06d}"
+    )
 
     @pytest.fixture(scope=scope)
     def _docker_container(_docker_client: "DockerClient") -> Generator:
@@ -54,7 +60,7 @@ def docker_container(
             image.id,
             detach=True,
             environment=_environment,
-            name=container_name,
+            name=_container_name,
             ports=ports,
         )
         time.sleep(1)
@@ -70,7 +76,7 @@ def docker_container(
     return _docker_container
 
 
-def _get_port_map(container: "Container", ports: Dict[str, Any]) -> Dict[str, List[str]]:
+def _get_port_map(container: "Container", ports: Dict[str, Any] = None) -> Dict[str, List[str]]:
     if not ports:
         return {}
 
