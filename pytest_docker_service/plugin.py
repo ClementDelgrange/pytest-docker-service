@@ -2,7 +2,7 @@
 pytest_docker_service package contains fixtures factories starting docker containers.
 """
 import time
-from typing import Callable, Dict, Generator, Optional, TYPE_CHECKING
+from typing import Any, Callable, Dict, Generator, List, Optional, TYPE_CHECKING, Iterable
 
 import docker
 import pytest
@@ -27,6 +27,7 @@ def docker_container(
         image_name: str,
         container_name: str,
         build_path: Optional[str] = None,
+        ports: Dict[str, Any] = None,
         environment: Dict[str, str] = None,
 ) -> Callable:
     """
@@ -36,10 +37,11 @@ def docker_container(
     :param image_name: name of the docker image to run
     :param container_name: name for the docker container to start
     :param build_path: path to the directory containing the Dockerfile
-    :param environment: environment variables to set inside the container
+    :param environment: the environment variables to set inside the container
+    :param ports: the ports to bind inside the container
     :return: a pytest fixture function
     """
-    _environment: Dict[str, str] = environment if environment else {}  # https://mypy.readthedocs.io/en/stable/common_issues.html#narrowing-and-inner-functions
+    _environment: Dict[str, Any] = environment if environment else {}  # https://mypy.readthedocs.io/en/stable/common_issues.html#narrowing-and-inner-functions
 
     @pytest.fixture(scope=scope)
     def _docker_container(_docker_client: "DockerClient") -> Generator:
@@ -53,19 +55,32 @@ def docker_container(
             detach=True,
             environment=_environment,
             name=container_name,
-            ports={"5432/tcp": 0}
+            ports=ports,
         )
         time.sleep(1)
         _check_container_running(container)
 
         _environment["host"] = "localhost"
-        _environment["port"] = container.attrs['NetworkSettings']['Ports']['5432/tcp'][0]['HostPort']
+        _environment["port_map"] = _get_port_map(container, ports)
 
         yield _environment
 
         container.remove(force=True)
 
     return _docker_container
+
+
+def _get_port_map(container: "Container", ports: Dict[str, Any]) -> Dict[str, List[str]]:
+    if not ports:
+        return {}
+
+    ports_settings = container.attrs["NetworkSettings"]["Ports"]
+    port_map = {}
+    for port in ports.keys():
+        host_ports = [p["HostPort"] for p in ports_settings[port]]
+        port_map[port] = host_ports if len(host_ports) > 1 else host_ports[0]
+
+    return port_map
 
 
 @tenacity.retry(

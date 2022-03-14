@@ -7,7 +7,7 @@ def test_container_available(pg_container):
     """Once created, the docker container should be available via the exposed port."""
     conn_info = {
         "host": pg_container["host"],
-        "port": pg_container["port"],
+        "port": pg_container["port_map"]["5432/tcp"],
         "dbname": pg_container["POSTGRES_DB"],
         "user": pg_container["POSTGRES_USER"],
         "password": pg_container["POSTGRES_PASSWORD"],

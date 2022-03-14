@@ -9,4 +9,5 @@ pg_container = docker_container(
     image_name="test-pg-database",
     container_name="test-pg-database-container",
     environment={"POSTGRES_PASSWORD": "postgres", "POSTGRES_USER": "postgres", "POSTGRES_DB": "testdb"},
+    ports={"5432/tcp": None},
 )
