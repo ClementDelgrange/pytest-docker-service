@@ -27,7 +27,7 @@ classifiers = [
 
 setup(
     name="pytest-docker-service",
-    version="0.0.2",
+    version="0.1.0",
     author="cdelgrange",
     license="GNU GPL v3",
     description="pytest plugin to start docker container",
