@@ -2,16 +2,15 @@
 pytest_docker_service package contains fixtures factories starting docker containers.
 """
 import random
-import time
-from typing import Any, Callable, Dict, Generator, List, Optional, TYPE_CHECKING
+from typing import Any, Callable, Dict, Generator, Optional, TYPE_CHECKING
 
 import docker
 import pytest
-import tenacity
+
+from .container import Container
 
 if TYPE_CHECKING:
     from docker import DockerClient
-    from docker.models.containers import Container
     from _pytest.fixtures import _Scope
 
 
@@ -56,50 +55,19 @@ def docker_container(
         else:
             image = _docker_client.images.pull(repository=image_name)
 
-        container = _docker_client.containers.run(
+        raw_container = _docker_client.containers.run(
             image.id,
             detach=True,
             environment=_environment,
             name=_container_name,
             ports=ports,
         )
-        time.sleep(1)
-        _check_container_running(container)
 
-        _environment["host"] = "localhost"
-        _environment["port_map"] = _get_port_map(container, ports)
+        container = Container(raw_container)
+        container.wait_ready()
 
-        yield _environment
+        yield container
 
         container.remove(force=True)
 
     return _docker_container
-
-
-def _get_port_map(container: "Container", ports: Dict[str, Any] = None) -> Dict[str, List[str]]:
-    if not ports:
-        return {}
-
-    ports_settings = container.attrs["NetworkSettings"]["Ports"]
-    port_map = {}
-    for port in ports.keys():
-        host_ports = [p["HostPort"] for p in ports_settings[port]]
-        port_map[port] = host_ports if len(host_ports) > 1 else host_ports[0]
-
-    return port_map
-
-
-@tenacity.retry(
-    wait=tenacity.wait_fixed(1),
-    stop=tenacity.stop_after_delay(10),
-    retry_error_callback=lambda *args: pytest.fail("could not start docker container"),
-)
-def _check_container_running(container: "Container"):
-    """
-    Fails the test if the container status does not change to 'running'.
-    """
-    container.reload()
-    if container.status != "running":
-        raise RuntimeError(
-            f"container {container.name} failed to start: status '{container.status}' / expected status 'running'",
-        )

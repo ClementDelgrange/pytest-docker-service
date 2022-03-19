@@ -9,8 +9,8 @@ container = docker_container(
 
 
 def test_status_code(container):
-    port = container["port_map"]["80/tcp"]
-    host = container["host"]
+    port = container.port_map()["80/tcp"]
+    host = "localhost"
 
     status = 200
     response = requests.get(f"http://{host}:{port}/status/{status}")

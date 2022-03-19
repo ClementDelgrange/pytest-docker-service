@@ -1,16 +1,36 @@
+import pathlib
+
 import psycopg
 import pytest
 import tenacity
+
+from pytest_docker_service import docker_container
+
+ENV = {
+    "POSTGRES_PASSWORD": "postgres",
+    "POSTGRES_USER": "postgres",
+    "POSTGRES_DB": "testdb",
+}
+
+
+pg_container = docker_container(
+    scope="session",
+    build_path=str(pathlib.Path(__file__).parent.joinpath("docker/postgres")),
+    image_name="test-pg-database",
+    container_name="test-pg-database-container",
+    environment=ENV,
+    ports={"5432/tcp": None},
+)
 
 
 def test_container_available(pg_container):
     """Once created, the docker container should be available via the exposed port."""
     conn_info = {
-        "host": pg_container["host"],
-        "port": pg_container["port_map"]["5432/tcp"],
-        "dbname": pg_container["POSTGRES_DB"],
-        "user": pg_container["POSTGRES_USER"],
-        "password": pg_container["POSTGRES_PASSWORD"],
+        "host": "localhost",
+        "port": pg_container.port_map()["5432/tcp"],
+        "dbname": ENV["POSTGRES_DB"],
+        "user": ENV["POSTGRES_USER"],
+        "password": ENV["POSTGRES_PASSWORD"],
     }
 
     @tenacity.retry(
