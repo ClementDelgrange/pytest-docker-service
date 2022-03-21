@@ -29,11 +29,10 @@ container = docker_container(
 
 
 def test_status_code(container):
-    port = container["port_map"]["80/tcp"]
-    host = container["host"]
+    port = container.port_map["80/tcp"]
 
     status = 200
-    response = requests.get(f"http://{host}:{port}/status/{status}")
+    response = requests.get(f"http://127.0.0.1:{port}/status/{status}")
 
     assert response.status_code == status
 ```
@@ -50,8 +49,7 @@ container = docker_container(
 
 
 def test_status_code(container):
-    port = container["port_map"]["5432/tcp"]
-    host = container["host"]
+    port = container.port_map.["5432/tcp"]
 
     ...
 

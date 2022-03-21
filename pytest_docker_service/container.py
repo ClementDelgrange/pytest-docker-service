@@ -1,6 +1,7 @@
 """
 This module exposes a wrapper around the docker Container object.
 """
+import functools
 import time
 from typing import Dict, List
 
@@ -49,12 +50,13 @@ class Container:
         """Removes the underlying docker container."""
         self._container.remove(force=force)
 
+    @functools.cached_property
     def port_map(self) -> Dict[str, List[str]]:
         """Returns the port mapping for the underlying docker container."""
         ports_settings = self._container.attrs["NetworkSettings"]["Ports"]
-        port_map: Dict[str, List[str]] = {}
+        portmap: Dict[str, List[str]] = {}
         for port in ports_settings:
             host_ports = [p["HostPort"] for p in ports_settings[port]]
-            port_map[port] = host_ports if len(host_ports) > 1 else host_ports[0]
+            portmap[port] = host_ports if len(host_ports) > 1 else host_ports[0]
 
-        return port_map
+        return portmap
