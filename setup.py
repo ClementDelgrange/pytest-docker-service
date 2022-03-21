@@ -38,7 +38,7 @@ setup(
     keywords=["pytest", "docker", "devops"],
     packages=find_packages(exclude=("tests",)),
     install_requires=reqs,
-    python_requires=">=3.9",
+    python_requires=">=3.6",
     entry_points={
         "pytest11": ["docker-service = pytest_docker_service.plugin"],
     },

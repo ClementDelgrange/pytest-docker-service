@@ -1,3 +1,5 @@
+-e .
+
 mypy
 psycopg
 pylint

@@ -53,10 +53,9 @@ class Container:
     @functools.cached_property
     def port_map(self) -> Dict[str, List[str]]:
         """Returns the port mapping for the underlying docker container."""
-        ports_settings = self._container.attrs["NetworkSettings"]["Ports"]
         portmap: Dict[str, List[str]] = {}
-        for port in ports_settings:
-            host_ports = [p["HostPort"] for p in ports_settings[port]]
-            portmap[port] = host_ports if len(host_ports) > 1 else host_ports[0]
+        for port, setting in self._container.attrs["NetworkSettings"]["Ports"].items():
+            host_ports = {s["HostPort"] for s in setting}
+            portmap[port] = list(host_ports) if len(host_ports) > 1 else host_ports.pop()
 
         return portmap

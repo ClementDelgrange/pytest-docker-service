@@ -11,7 +11,7 @@ from .container import Container
 
 if TYPE_CHECKING:
     from docker import DockerClient
-    from _pytest.fixtures import _Scope
+    from _pytest.fixtures import _Scope  # type: ignore
 
 
 @pytest.fixture(scope="session")
