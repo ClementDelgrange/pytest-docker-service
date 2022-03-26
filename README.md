@@ -1,4 +1,7 @@
+[![Python package](https://github.com/ClementDelgrange/pytest-docker-service/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/ClementDelgrange/pytest-docker-service/actions/workflows/ci.yaml)
+
 # pytest-docker-service
+
 `pytest-docker-service` is a pytest plugin for writing integration tests based on docker containers.
 
 The plugin provides a *fixtures factory*: a configurable function to register fixtures.
