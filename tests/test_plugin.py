@@ -8,7 +8,7 @@ def test_container_created_image_pulled(_docker_client, pytester):
     The container should be deleted at the end of the test.
     """
     pytester.makeconftest(
-        f"""
+        """
         import pathlib
         from pytest_docker_service import docker_container
 
@@ -55,7 +55,7 @@ def test_container_created_image_build(_docker_client, pytester):
     )
 
     pytester.makeconftest(
-        f"""
+        """
         import pathlib
         from pytest_docker_service import docker_container
 
@@ -91,10 +91,10 @@ def test_failed_to_start_container(_docker_client, pytester):
     The container should not be deleted at the end in this case.
     """
     pytester.makeconftest(
-        f"""
+        """
         import pathlib
         from pytest_docker_service import docker_container
-        
+
         container = docker_container(
             scope="session",
             image_name="postgres:14",

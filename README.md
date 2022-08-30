@@ -16,7 +16,7 @@ python -m pip install pytest-docker-service
 ```
 
 ## Usage
-You just have to create a fixture in your `confest.py` or in individual test modules, using the `docker_container` helper.
+You just have to create a fixture in your `conftest.py` or in individual test modules, using the `docker_container` helper.
 Fixture is created with the scope provided through the `scope` parameter.
 Other parameters are wrappers around the `docker-py` API (https://docker-py.readthedocs.io/en/stable/).
 
