@@ -46,7 +46,7 @@ Just set the `build_path` parameter pointing to the directory containing the Doc
 container = docker_container(
     scope="session",
     image_name="my-image",
-    build_path="path/to/dockerfile/directory"
+    build_path="path/to/dockerfile/directory",
     ports={"80/tcp": None},
 )
 
