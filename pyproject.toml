@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=65.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.poetry]
+name = "pytest-docker-service"
+version = "0.2.3b"
+description = "pytest plugin to start docker container"
+authors = ["Clément Delgrange"]
+license = "GNU GPL v3"
+readme = "README.md"
+repository = "https://github.com/ClementDelgrange/pytest-docker-service"
+keywords = ["pytest", "docker", "devops"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: Pytest",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Affero General Public License v3",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Software Development :: Testing",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.8.0,<4.0"
+docker = ">=6.0.0"
+pytest = ">=7.1.3"
+tenacity = ">=8.1.0"
+
+[tool.poetry.plugins."pytest11"]
+docker-service = "pytest_docker_service.plugin"
+
+[tool.poetry.group.tests]
+[tool.poetry.group.tests.dependencies]
+mypy = "^0.982"
+psycopg = "^3.1.3"
+pylint = "^2.15.5"
+pytest-cov = "^4.0.0"
+
+[tool.pytest.ini_options]
+addopts = "--cov=pytest_docker_service/ --cov-append --cov-report=term-missing"
+
+[tool.coverage.run]
+omit = ["tests/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "if TYPE_CHECKING:"
+]
+
+[tool.mypy]
+files = ["pytest_docker_service/"]
+ignore_missing_imports = true

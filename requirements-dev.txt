@@ -1,6 +1,0 @@
--e .
-
-mypy
-psycopg
-pylint
-pytest-cov
