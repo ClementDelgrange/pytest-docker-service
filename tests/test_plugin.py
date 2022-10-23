@@ -8,7 +8,7 @@ def test_container_created_image_pulled(_docker_client, pytester):
     The container should be deleted at the end of the test.
     """
     pytester.makeconftest(
-        """
+        f"""
         import pathlib
         from pytest_docker_service import docker_container
 
