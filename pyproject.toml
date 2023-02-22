@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=65.0"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.3.2"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "pytest-docker-service"
-version = "0.2.3b"
+version = "0.2.4"
 description = "pytest plugin to start docker container"
 authors = ["Clément Delgrange"]
 license = "GNU GPL v3"
@@ -18,7 +18,10 @@ classifiers = [
     "License :: OSI Approved :: GNU Affero General Public License v3",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Topic :: Software Development :: Testing",
 ]
 
