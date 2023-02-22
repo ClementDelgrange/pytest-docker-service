@@ -13,7 +13,7 @@ jobs:
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
-          python3 -m pip install poetry==1.2.2
+          python3 -m pip install poetry==1.3.2
           python3 -m poetry config virtualenvs.create false
           python3 -m poetry install --with tests
       - name: Run pylint
@@ -43,7 +43,7 @@ jobs:
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
-          python3 -m pip install poetry==1.2.2
+          python3 -m pip install poetry==1.3.2
           python3 -m poetry config virtualenvs.create false
           python3 -m poetry install --with tests
       - name: Run pytest
