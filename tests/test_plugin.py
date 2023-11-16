@@ -113,7 +113,8 @@ def test_failed_to_start_container(_docker_client, pytester):
     result = pytester.runpytest()
     result.assert_outcomes(errors=1)
     result.stdout.re_match_lines([
-        r".*container test-pg-database-container-not-starting exited with code \d+.*"
+        r".*container test-pg-database-container-not-starting exited with code \d+.*",
+        r".*Error: Database is uninitialized and superuser password is not specified.*",
     ])
 
     c = _docker_client.containers.get("test-pg-database-container-not-starting")
