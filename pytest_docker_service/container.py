@@ -19,6 +19,11 @@ class Container:
         self._container = container
 
     @property
+    def exited(self):
+        """Returns True if the underlying docker container is in 'exited' status."""
+        return self._container.status == "exited"
+
+    @property
     def ready(self):
         """Returns True if the underlying docker container is in 'running' status."""
         return self._container.status == "running"
@@ -40,13 +45,14 @@ class Container:
         )
         def _wait_ready():
             self._container.reload()
-            if self._container.status == "exited":
+            if self.exited:
                 exit_code = self._container.attrs['State']['ExitCode']
                 raise RuntimeError(
                     f"container {self._container.name} exited with code {exit_code}, "
                     f"logs: {self._container.logs().decode()}"
                 )
-            elif not self.ready:
+
+            if not self.ready:
                 raise RuntimeError(
                     (
                         f"container {self._container.name} failed to start: "
