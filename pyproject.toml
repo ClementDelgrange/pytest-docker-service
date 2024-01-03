@@ -4,13 +4,13 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "pytest-docker-service"
-version = "0.2.4"
+version = "0.2.5"
 description = "pytest plugin to start docker container"
 authors = ["Clément Delgrange"]
 license = "GNU GPL v3"
 readme = "README.md"
 repository = "https://github.com/ClementDelgrange/pytest-docker-service"
-keywords = ["pytest", "docker", "devops"]
+keywords = ["pytest", "docker", "devops", "CI"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Framework :: Pytest",

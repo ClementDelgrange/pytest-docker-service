@@ -6,7 +6,7 @@
 
 The plugin provides a *fixtures factory*: a configurable function to register fixtures.
 
-The package has been developed and tested with Python 3.10, and pytest version 6.2.
+The package has been developed and tested with Python 3.11, and pytest version 7.4.
 
 ## Installation
 Install `pytest-docker-service` with `pip`.
