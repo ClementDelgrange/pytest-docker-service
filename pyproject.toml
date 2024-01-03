@@ -36,11 +36,14 @@ docker-service = "pytest_docker_service.plugin"
 
 [tool.poetry.group.tests]
 [tool.poetry.group.tests.dependencies]
-mypy = "^1.8"
 psycopg = "^3.1"
-pylint = "^2.15"
 pytest-cov = "^4.0"
 requests = "^2.31"
+
+[tool.poetry.group.lint]
+[tool.poetry.group.lint.dependencies]
+mypy = "^1.8"
+pylint = "^2.15"
 
 [tool.pytest.ini_options]
 addopts = "--cov=pytest_docker_service/ --cov-append --cov-report=term-missing"
