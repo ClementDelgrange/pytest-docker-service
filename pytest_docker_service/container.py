@@ -15,6 +15,7 @@ class Container:
     The Container class wraps the docker Container object
     and adds some useful method for testing.
     """
+
     def __init__(self, container: docker.models.containers.Container):
         self._container = container
 
@@ -34,9 +35,7 @@ class Container:
         """
 
         def _report_last_error(retry_state):
-            pytest.fail(
-                f"failed to get container {self._container.name} ready: {retry_state.outcome.exception()}"
-            )
+            pytest.fail(f"failed to get container {self._container.name} ready: {retry_state.outcome.exception()}")
 
         @tenacity.retry(
             wait=tenacity.wait_fixed(1),
@@ -46,7 +45,7 @@ class Container:
         def _wait_ready():
             self._container.reload()
             if self.exited:
-                exit_code = self._container.attrs['State']['ExitCode']
+                exit_code = self._container.attrs["State"]["ExitCode"]
                 raise RuntimeError(
                     f"container {self._container.name} exited with code {exit_code}, "
                     f"logs: {self._container.logs().decode()}"
@@ -54,10 +53,8 @@ class Container:
 
             if not self.ready:
                 raise RuntimeError(
-                    (
-                        f"container {self._container.name} failed to start: "
-                        f"status '{self._container.status}' / expected status 'running'"
-                    )
+                    f"container {self._container.name} failed to start: "
+                    f"status '{self._container.status}' / expected status 'running'"
                 )
 
         time.sleep(1)
@@ -72,7 +69,7 @@ class Container:
         """Returns the port mapping for the underlying docker container."""
         portmap: Dict[str, List[str]] = {}
         for port, setting in self._container.attrs["NetworkSettings"]["Ports"].items():
-            host_ports = {s["HostPort"] for s in setting if s['HostIp'] != '::'}  # exclude ipv6
+            host_ports = {s["HostPort"] for s in setting if s["HostIp"] != "::"}  # exclude ipv6
             portmap[port] = list(host_ports) if len(host_ports) > 1 else host_ports.pop()
 
         return portmap

@@ -8,7 +8,7 @@ def test_container_created_image_pulled(_docker_client, pytester):
     The container should be deleted at the end of the test.
     """
     pytester.makeconftest(
-        f"""
+        """
         import pathlib
         from pytest_docker_service import docker_container
 
@@ -16,7 +16,7 @@ def test_container_created_image_pulled(_docker_client, pytester):
             scope="session",
             image_name="postgres:14",
             container_name="test-pg-database-container-image-pulled",
-            environment={{"POSTGRES_PASSWORD": "postgres", "POSTGRES_USER": "postgres", "POSTGRES_DB": "testdb"}},
+            environment={"POSTGRES_PASSWORD": "postgres", "POSTGRES_USER": "postgres", "POSTGRES_DB": "testdb"},
         )
         """
     )
@@ -112,10 +112,12 @@ def test_failed_to_start_container(_docker_client, pytester):
 
     result = pytester.runpytest()
     result.assert_outcomes(errors=1)
-    result.stdout.re_match_lines([
-        r".*container test-pg-database-container-not-starting exited with code \d+.*",
-        r".*Error: Database is uninitialized and superuser password is not specified.*",
-    ])
+    result.stdout.re_match_lines(
+        [
+            r".*container test-pg-database-container-not-starting exited with code \d+.*",
+            r".*Error: Database is uninitialized and superuser password is not specified.*",
+        ]
+    )
 
     c = _docker_client.containers.get("test-pg-database-container-not-starting")
     assert c is not None

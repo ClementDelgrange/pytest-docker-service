@@ -39,11 +39,10 @@ def test_container_available(pg_container):
         retry_error_callback=lambda *args: pytest.fail("failed to connect to the container"),
     )
     def _connect():
-        with psycopg.connect(**conn_info) as conn:
-            with conn.cursor() as cursor:
-                cursor.execute("SELECT version();")
-                row = cursor.fetchone()
-                assert len(row) == 1
-                assert row[0].startswith("PostgreSQL 14")
+        with psycopg.connect(**conn_info) as conn, conn.cursor() as cursor:
+            cursor.execute("SELECT version();")
+            row = cursor.fetchone()
+            assert len(row) == 1
+            assert row[0].startswith("PostgreSQL 14")
 
     _connect()

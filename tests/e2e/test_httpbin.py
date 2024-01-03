@@ -1,4 +1,5 @@
 import requests
+
 from pytest_docker_service import docker_container
 
 container = docker_container(

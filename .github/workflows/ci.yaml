@@ -16,7 +16,7 @@ jobs:
           python3 -m pip install poetry==1.7.1
           poetry install --with lint
       - name: Run pylint
-        run: poetry run pylint pytest_docker_service
+        run: poetry run ruff check .
       - name: Run mypy
         run: poetry run mypy
 

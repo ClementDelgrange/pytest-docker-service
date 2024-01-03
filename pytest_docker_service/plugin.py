@@ -2,7 +2,7 @@
 pytest_docker_service package contains fixtures factories starting docker containers.
 """
 import random
-from typing import Any, Callable, Dict, Generator, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Callable, Dict, Generator, Optional
 
 import docker
 import pytest
@@ -10,8 +10,8 @@ import pytest
 from .container import Container
 
 if TYPE_CHECKING:
-    from docker import DockerClient
     from _pytest.fixtures import _Scope  # type: ignore
+    from docker import DockerClient
 
 
 @pytest.fixture(scope="session")
@@ -23,12 +23,12 @@ def _docker_client() -> "DockerClient":
 
 
 def docker_container(
-        scope: "_Scope",
-        image_name: str,
-        container_name: str = "",
-        build_path: Optional[str] = None,
-        ports: Optional[dict[str, Any]] = None,
-        environment: Optional[dict[str, str]] = None,
+    scope: "_Scope",
+    image_name: str,
+    container_name: str = "",
+    build_path: Optional[str] = None,
+    ports: Optional[dict[str, Any]] = None,
+    environment: Optional[dict[str, str]] = None,
 ) -> Callable:
     """
     Fixtures factory that returns a container that is running the specified image.
@@ -41,11 +41,11 @@ def docker_container(
     :param ports: the ports to bind inside the container
     :return: a pytest fixture function
     """
-    _environment: Dict[str, Any] = environment if environment else {}  # https://mypy.readthedocs.io/en/stable/common_issues.html#narrowing-and-inner-functions
+    _environment: Dict[str, Any] = (
+        environment if environment else {}
+    )  # https://mypy.readthedocs.io/en/stable/common_issues.html#narrowing-and-inner-functions
     _container_name: str = (
-        container_name
-        if container_name
-        else f"{image_name.split('/')[-1]}-{random.randint(0, 999999):06d}"
+        container_name if container_name else f"{image_name.split('/')[-1]}-{random.randint(0, 999999):06d}"
     )
 
     @pytest.fixture(scope=scope)
