@@ -1,4 +1,6 @@
-[![Python package](https://github.com/ClementDelgrange/pytest-docker-service/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/ClementDelgrange/pytest-docker-service/actions/workflows/ci.yaml)
+[![image](https://img.shields.io/pypi/v/pytest-docker-servic/0.2.6.svg)](https://pypi.python.org/pypi/pytest-docker-service)
+[![image](https://img.shields.io/pypi/pyversions/pytest-docker-servic/0.2.6.svg)](https://pypi.python.org/pypi/pytest-docker-service)
+[![image](https://github.com/ClementDelgrange/pytest-docker-service/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/ClementDelgrange/pytest-docker-service/actions/workflows/ci.yaml)
 
 # pytest-docker-service
 
