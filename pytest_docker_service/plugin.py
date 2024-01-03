@@ -25,10 +25,10 @@ def _docker_client() -> "DockerClient":
 def docker_container(
         scope: "_Scope",
         image_name: str,
-        container_name: Optional[str] = "",
+        container_name: str = "",
         build_path: Optional[str] = None,
-        ports: Dict[str, Any] = None,
-        environment: Dict[str, str] = None,
+        ports: Optional[dict[str, Any]] = None,
+        environment: Optional[dict[str, str]] = None,
 ) -> Callable:
     """
     Fixtures factory that returns a container that is running the specified image.
