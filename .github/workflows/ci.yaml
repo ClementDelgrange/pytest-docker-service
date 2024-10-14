@@ -36,9 +36,6 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - uses: docker-practice/actions-setup-docker@master
-        with:
-          docker_version: "20.10"
-          docker_channel: stable
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
